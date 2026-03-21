@@ -1,0 +1,40 @@
+import { useInfiniteQuery } from '@tanstack/react-query'
+import type { Category } from '../../../constants/category'
+import type { SortOption } from '../../../constants/sort'
+import { postsApi } from '..'
+
+export const POSTS_PAGE_SIZE = 9
+
+interface UseGetPostsParams {
+  q?: string
+  categories?: Category[]
+  needsRevision?: boolean
+  sortOption?: SortOption
+}
+
+export const useGetPosts = ({
+  q = '',
+  categories = [],
+  needsRevision = false,
+  sortOption,
+}: UseGetPostsParams = {}) => {
+  const categoriesKey = categories.slice().sort().join(',')
+
+  return useInfiniteQuery({
+    queryKey: ['items', q, categoriesKey, needsRevision, sortOption],
+    initialPageParam: 0,
+    queryFn: ({ pageParam }) =>
+      postsApi.getPosts({
+        skip: pageParam,
+        limit: POSTS_PAGE_SIZE,
+        q,
+        categories,
+        needsRevision,
+        sortOption,
+      }),
+    getNextPageParam: (lastPage, allPages) => {
+      const loadedItemsCount = allPages.reduce((acc, page) => acc + page.items.length, 0)
+      return loadedItemsCount < lastPage.total ? loadedItemsCount : undefined
+    },
+  })
+}
