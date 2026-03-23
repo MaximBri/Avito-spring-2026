@@ -1,11 +1,12 @@
-import Fastify from 'fastify'
+import Fastify, { RequestGenericInterface } from 'fastify'
 
 import items from './items.json' with { type: 'json' }
 import { treeifyError, ZodError } from 'zod'
-import { Item } from 'types.ts'
-import { doesItemNeedRevision } from 'utils.ts'
-import { ItemsGetInQuerySchema, ItemUpdateInSchema } from 'validation.ts'
+import { Item } from './types.ts'
+import { doesItemNeedRevision } from './utils.ts'
+import { ItemsGetInQuerySchema, ItemUpdateInSchema } from './validation.ts'
 import cors from '@fastify/cors'
+import 'dotenv/config';
 
 const ITEMS = items as Item[]
 
@@ -19,7 +20,7 @@ await fastify.register(cors, {
   allowedHeaders: ['Content-Type', 'Authorization'],
 })
 
-interface ItemGetRequest extends Fastify.RequestGenericInterface {
+interface ItemGetRequest extends RequestGenericInterface {
   Params: {
     id: string
   }
@@ -50,7 +51,7 @@ fastify.get<ItemGetRequest>('/items/:id', (request, reply) => {
   }
 })
 
-interface ItemsGetRequest extends Fastify.RequestGenericInterface {
+interface ItemsGetRequest extends RequestGenericInterface {
   Querystring: {
     q?: string
     limit?: string
@@ -111,7 +112,7 @@ fastify.get<ItemsGetRequest>('/items', (request) => {
   }
 })
 
-interface ItemUpdateRequest extends Fastify.RequestGenericInterface {
+interface ItemUpdateRequest extends RequestGenericInterface {
   Params: {
     id: string
   }
@@ -160,7 +161,7 @@ fastify.put<ItemUpdateRequest>('/items/:id', (request, reply) => {
   }
 })
 
-const port = Number(process.env.port ?? 8080)
+const port = Number(process.env.PORT)
 
 fastify.listen({ port }, function (err, _address) {
   if (err) {
