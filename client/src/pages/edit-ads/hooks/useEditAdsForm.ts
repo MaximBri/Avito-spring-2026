@@ -9,8 +9,11 @@ import {
 } from '../../../shared/constants/category'
 import { useUpdatePost } from '../../../shared/api/posts/hooks/useUpdatePost'
 import { notifications } from '@mantine/notifications'
+import { useNavigate } from 'react-router-dom'
+import { APP_ROUTES } from '../../../shared/constants/routes'
 
 export const useEditAdsForm = (id: number, postData?: PostItemModel) => {
+  const navigate = useNavigate()
   const { mutate: updatePost } = useUpdatePost(id)
   const form = useForm<EditFormValues>({
     resolver: zodResolver(editSchema),
@@ -40,15 +43,17 @@ export const useEditAdsForm = (id: number, postData?: PostItemModel) => {
       {
         onSuccess: () => {
           notifications.show({
-            title: 'Объявление обновлено',
+            title: 'Изменения сохранены',
             message: '',
             color: 'green',
           })
+          navigate(`${APP_ROUTES.ADS}/${id}`)
         },
         onError: () => {
           notifications.show({
-            title: 'Ошибка при обновлении',
-            message: '',
+            title: 'Ошибка сохранения',
+            message:
+              'При попытке сохранить изменения произошла ошибка. Попробуйте ещё раз или зайдите позже.',
             color: 'red',
           })
         },

@@ -1,7 +1,6 @@
 import { Navigate, useParams } from 'react-router-dom'
 import { FormProvider } from 'react-hook-form'
 import { AppShell, Box, Button, Group, Stack, Text, Title } from '@mantine/core'
-import { PageStatus } from '../../shared/ui/PageStatus'
 import { APP_ROUTES } from '../../shared/constants/routes'
 import {
   ALL_CATEGORIES,
@@ -16,7 +15,8 @@ import { TextField } from '../../shared/ui/TextField'
 import { NumberField } from '../../shared/ui/NumberField'
 import { TextareaField } from '../../shared/ui/TextareaField'
 import { FieldWrapper } from '../../features/FieldWrapper'
-import { PriceButton } from '../../features/PriceButton'
+import { AiPriceButton } from '../../features/AiPriceButton'
+import { AiDescriptionButton } from '../../features/AiDescriptionButton'
 
 export const EditAdsPage = () => {
   const { id } = useParams<{ id: string }>()
@@ -39,14 +39,7 @@ export const EditAdsPage = () => {
     return <Navigate to={APP_ROUTES.ADS} replace />
   }
 
-  if (isLoading || !postData) {
-    return (
-      <PageStatus
-        isLoading={true}
-        loadingTitle="Загружаю данные для редактирования..."
-      />
-    )
-  }
+  if (isLoading || !postData) return
 
   return (
     <FormProvider {...form}>
@@ -89,7 +82,7 @@ export const EditAdsPage = () => {
                   name="price"
                   min={1}
                 />
-                <PriceButton postData={postData}/>
+                <AiPriceButton postData={postData} />
               </FieldWrapper>
               <FieldWrapper>
                 <Box>
@@ -114,7 +107,9 @@ export const EditAdsPage = () => {
                 placeholder="Описание объявления"
                 minRows={4}
                 name="description"
+                style={{ maxWidth: '950px' }}
               />
+              <AiDescriptionButton postData={postData} />
               <Group justify="flex-start" mt="lg" gap="md">
                 <Button type="submit" disabled={isSubmitting || !isValid}>
                   Сохранить

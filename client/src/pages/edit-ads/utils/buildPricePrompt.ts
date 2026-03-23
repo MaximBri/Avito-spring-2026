@@ -1,45 +1,10 @@
-import type {
-  AutoItemParams,
-  ElectronicsItemParams,
-  PostItemModel,
-  RealEstateItemParams,
-} from '../../../shared/api/posts/types'
-import {
-  Category,
-  CATEGORY_LABELS_RU,
-} from '../../../shared/constants/category'
+import type { PostItemModel } from '../../../shared/api/posts/types'
+import { CATEGORY_LABELS_RU } from '../../../shared/constants/category'
+import { getPostParams } from '../../../shared/utils/getPostParams'
 
-export const buildPrompt = (post: PostItemModel) => {
+export const buildPricePrompt = (post: PostItemModel) => {
   const categoryName = CATEGORY_LABELS_RU[post.category] || post.category
-
-  let paramsShort = ''
-  switch (post.category) {
-    case Category.AUTO: {
-      const p = post.params as AutoItemParams
-      paramsShort = [
-        p.brand,
-        p.model,
-        p.yearOfManufacture && `${p.yearOfManufacture} г.`,
-      ]
-        .filter(Boolean)
-        .join(', ')
-      break
-    }
-    case Category.REAL_ESTATE: {
-      const p = post.params as RealEstateItemParams
-      paramsShort = [p.type, p.address, p.area && `${p.area} м²`]
-        .filter(Boolean)
-        .join(', ')
-      break
-    }
-    case Category.ELECTRONICS: {
-      const p = post.params as ElectronicsItemParams
-      paramsShort = [p.type, p.brand, p.model, p.condition]
-        .filter(Boolean)
-        .join(', ')
-      break
-    }
-  }
+  const paramsShort = getPostParams(post)
 
   return `
 Ты — краткий оценщик цен на Авито/Юла (Россия, март 2026).
