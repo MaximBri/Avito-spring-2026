@@ -39,12 +39,16 @@ export const Posts: FC<PostsProps> = ({
     sortOption,
   })
   const [page, setPage] = useState(1)
+  const listContainerRef = useRef<HTMLDivElement | null>(null)
 
   const totalItems = posts?.pages[0]?.total ?? 0
   const totalPages = Math.max(1, Math.ceil(totalItems / POSTS_PAGE_SIZE))
   const loadedPages = posts?.pages.length ?? 0
-
   const pageItems = posts?.pages[page - 1]?.items
+  const shouldShowSkeletons = isLoading || !pageItems
+  const skeletonCount = Math.max(1, POSTS_PAGE_SIZE)
+  const colSpan = viewMode === ViewMode.GRID ? 4 : 12
+
   const items = useMemo(() => {
     const baseItems = pageItems ?? []
 
@@ -58,14 +62,6 @@ export const Posts: FC<PostsProps> = ({
 
     return baseItems
   }, [pageItems, sortOption])
-  const shouldShowSkeletons = isLoading || !pageItems
-  const skeletonCount = Math.max(1, POSTS_PAGE_SIZE)
-  const colSpan = viewMode === ViewMode.GRID ? 4 : 12
-  const listContainerRef = useRef<HTMLDivElement | null>(null)
-
-  useEffect(() => {
-    setPage(1)
-  }, [searchQuery, categories, needsRevision, sortOption])
 
   const handlePageChange = async (nextPage: number) => {
     setPage(nextPage)
@@ -82,6 +78,10 @@ export const Posts: FC<PostsProps> = ({
       }
     }
   }
+
+  useEffect(() => {
+    setPage(1)
+  }, [searchQuery, categories, needsRevision, sortOption])
 
   return (
     <div

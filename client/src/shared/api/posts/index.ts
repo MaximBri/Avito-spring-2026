@@ -1,16 +1,6 @@
-import type { Category } from '../../constants/category'
-import { SortOption } from '../../constants/sort'
+import { sortMap, SortOption } from '../../constants/sort'
 import { api } from '../axios'
-import type { PostResponseModel } from './types'
-
-interface GetPostsParams {
-  skip?: number
-  limit?: number
-  q?: string
-  categories?: Category[]
-  needsRevision?: boolean
-  sortOption?: SortOption
-}
+import type { GetPostsParams, PostResponseModel, PostItemModel } from './types'
 
 export const postsApi = {
   getPosts: async ({
@@ -20,20 +10,9 @@ export const postsApi = {
     categories = [],
     needsRevision = false,
     sortOption = SortOption.CREATED_DESC,
-  }: GetPostsParams = {}): Promise<PostResponseModel> => {
-    const sortColumn =
-      sortOption === SortOption.TITLE_ASC || sortOption === SortOption.TITLE_DESC
-        ? 'title'
-        : sortOption === SortOption.CREATED_ASC || sortOption === SortOption.CREATED_DESC
-          ? 'createdAt'
-          : undefined
-
-    const sortDirection =
-      sortOption === SortOption.TITLE_ASC || sortOption === SortOption.CREATED_ASC
-        ? 'asc'
-        : sortOption === SortOption.TITLE_DESC || sortOption === SortOption.CREATED_DESC
-          ? 'desc'
-          : undefined
+  }: GetPostsParams): Promise<PostResponseModel> => {
+    const sortColumn = sortMap[sortOption]?.column
+    const sortDirection = sortMap[sortOption]?.direction
 
     const { data } = await api.get('/items', {
       params: {
@@ -46,6 +25,16 @@ export const postsApi = {
         sortDirection,
       },
     })
+    return data
+  },
+
+  getPost: async (id: number) => {
+    const { data } = await api.get(`/items/${id}`)
+    return data
+  },
+
+  updatePost: async (id: number, update: Partial<PostItemModel>) => {
+    const { data } = await api.put(`/items/${id}`, update)
     return data
   },
 }

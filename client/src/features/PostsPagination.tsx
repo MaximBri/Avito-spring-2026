@@ -1,4 +1,5 @@
 import { Pagination } from '@mantine/core'
+import type { FC } from 'react'
 
 interface PostsPaginationProps {
   total: number
@@ -6,7 +7,11 @@ interface PostsPaginationProps {
   onChange: (page: number) => void
 }
 
-export const PostsPagination = ({ total, value, onChange }: PostsPaginationProps) => {
+export const PostsPagination: FC<PostsPaginationProps> = ({
+  total,
+  value,
+  onChange,
+}) => {
   if (total <= 1) return null
 
   return (

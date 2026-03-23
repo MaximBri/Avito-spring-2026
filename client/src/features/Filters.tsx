@@ -9,8 +9,12 @@ import {
   Switch,
   Text,
 } from '@mantine/core'
-import { ALL_CATEGORIES, CATEGORY_LABELS_RU } from '../shared/constants/category'
+import {
+  ALL_CATEGORIES,
+  CATEGORY_LABELS_RU,
+} from '../shared/constants/category'
 import type { Category } from '../shared/constants/category'
+import type { FC } from 'react'
 
 interface FiltersProps {
   selectedCategories: Category[]
@@ -20,13 +24,13 @@ interface FiltersProps {
   onResetFilters: () => void
 }
 
-export const Filters = ({
+export const Filters: FC<FiltersProps> = ({
   selectedCategories,
   onlyNeedsRevision,
   onCategoryChange,
   onNeedsRevisionChange,
   onResetFilters,
-}: FiltersProps) => {
+}) => {
   return (
     <Stack gap="xs">
       <Card radius={10} p={16} bg="#FFFFFF">
@@ -71,7 +75,9 @@ export const Filters = ({
                 <Checkbox
                   key={category}
                   checked={selectedCategories.includes(category)}
-                  onChange={(event) => onCategoryChange(category, event.currentTarget.checked)}
+                  onChange={(event) =>
+                    onCategoryChange(category, event.currentTarget.checked)
+                  }
                   p={0}
                   size="md"
                   radius="sm"
@@ -92,7 +98,9 @@ export const Filters = ({
           </Text>
           <Switch
             checked={onlyNeedsRevision}
-            onChange={(event) => onNeedsRevisionChange(event.currentTarget.checked)}
+            onChange={(event) =>
+              onNeedsRevisionChange(event.currentTarget.checked)
+            }
             variant="default"
             size="lg"
             color="gray"
