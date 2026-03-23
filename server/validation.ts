@@ -5,32 +5,32 @@ import { ItemSortColumn, SortDirection } from './types.ts';
 const AutoTransmissionSchema = z.enum(['automatic', 'manual']);
 
 export const AutoItemParamsSchema = z.strictObject({
-  brand: z.string().nonempty(),
-  model: z.string().nonempty(),
-  yearOfManufacture: z.number().int().positive(),
-  transmission: AutoTransmissionSchema,
-  mileage: z.number().positive(),
-  enginePower: z.number().int().positive(),
+  brand: z.string().optional(),
+  model: z.string().optional(),
+  yearOfManufacture: z.number().int().nonnegative().optional(),
+  transmission: AutoTransmissionSchema.optional(),
+  mileage: z.number().nonnegative().optional(),
+  enginePower: z.number().int().nonnegative().optional(),
 });
 
 const RealEstateTypeSchema = z.enum(['flat', 'house', 'room']);
 
 export const RealEstateItemParamsSchema = z.strictObject({
-  type: RealEstateTypeSchema,
-  address: z.string().nonempty(),
-  area: z.number().positive(),
-  floor: z.number().int().positive(),
+  type: RealEstateTypeSchema.optional(),
+  address: z.string().optional(),
+  area: z.number().nonnegative().optional(),
+  floor: z.number().int().nonnegative().optional(),
 });
 
 const ElectronicsTypeSchema = z.enum(['phone', 'laptop', 'misc']);
 const ElectronicsConditionSchema = z.enum(['new', 'used']);
 
 export const ElectronicsEstateItemParamsSchema = z.strictObject({
-  type: ElectronicsTypeSchema,
-  brand: z.string().nonempty(),
-  model: z.string().nonempty(),
-  condition: ElectronicsConditionSchema,
-  color: z.string().nonempty(),
+  type: ElectronicsTypeSchema.optional(),
+  brand: z.string().optional(),
+  model: z.string().optional(),
+  condition: ElectronicsConditionSchema.optional(),
+  color: z.string().optional(),
 });
 
 const CategorySchema = z.enum(Object.values(ITEM_CATEGORIES));

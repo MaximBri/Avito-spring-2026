@@ -66,7 +66,6 @@ export default function AdsPage() {
           onSortChange={setSortOption}
           onViewModeChange={setViewMode}
         />
-        {/* Flex вместо Grid: иначе колонка тянется по высоте контента и пагинация уезжает под overflow AppShell */}
         <div
           style={{
             display: 'flex',
@@ -75,6 +74,7 @@ export default function AdsPage() {
             minHeight: 0,
             marginTop: 16,
             alignItems: 'stretch',
+            justifyContent: 'space-between'
           }}
         >
           <aside
