@@ -4,6 +4,7 @@ import { SORT_OPTIONS } from '../shared/constants/sort'
 import type { SortOption } from '../shared/constants/sort'
 import { ViewMode } from '../shared/constants/view'
 import type { ViewMode as ViewModeType } from '../shared/constants/view'
+import type { FC } from 'react'
 
 interface SearchBarProps {
   searchValue: string
@@ -14,14 +15,14 @@ interface SearchBarProps {
   onViewModeChange: (mode: ViewModeType) => void
 }
 
-export const SearchBar = ({
+export const SearchBar: FC<SearchBarProps> = ({
   searchValue,
   sortValue,
   viewMode,
   onSearchChange,
   onSortChange,
   onViewModeChange,
-}: SearchBarProps) => {
+}) => {
   return (
     <Group
       justify="space-between"

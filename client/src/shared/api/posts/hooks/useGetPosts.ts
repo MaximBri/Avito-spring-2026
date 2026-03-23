@@ -1,16 +1,8 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
-import type { Category } from '../../../constants/category'
-import type { SortOption } from '../../../constants/sort'
 import { postsApi } from '..'
+import type { UseGetPostsParams } from '../types'
 
 export const POSTS_PAGE_SIZE = 9
-
-interface UseGetPostsParams {
-  q?: string
-  categories?: Category[]
-  needsRevision?: boolean
-  sortOption?: SortOption
-}
 
 export const useGetPosts = ({
   q = '',
@@ -33,7 +25,10 @@ export const useGetPosts = ({
         sortOption,
       }),
     getNextPageParam: (lastPage, allPages) => {
-      const loadedItemsCount = allPages.reduce((acc, page) => acc + page.items.length, 0)
+      const loadedItemsCount = allPages.reduce(
+        (acc, page) => acc + page.items.length,
+        0,
+      )
       return loadedItemsCount < lastPage.total ? loadedItemsCount : undefined
     },
   })

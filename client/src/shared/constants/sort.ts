@@ -17,3 +17,12 @@ export const SORT_OPTIONS: Array<{ value: SortOption; label: string }> = [
   { value: SortOption.PRICE_ASC, label: 'По цене (сначала дешевле)' },
   { value: SortOption.PRICE_DESC, label: 'По цене (сначала дороже)' },
 ]
+
+export const sortMap = {
+  [SortOption.TITLE_ASC]: { column: 'title', direction: 'asc' },
+  [SortOption.TITLE_DESC]: { column: 'title', direction: 'desc' },
+  [SortOption.CREATED_ASC]: { column: 'createdAt', direction: 'asc' },
+  [SortOption.CREATED_DESC]: { column: 'createdAt', direction: 'desc' },
+  [SortOption.PRICE_ASC]: { column: 'price', direction: 'asc' },
+  [SortOption.PRICE_DESC]: { column: 'price', direction: 'desc' },
+} as const
