@@ -90,21 +90,24 @@ export const Posts: FC<PostsProps> = ({
         flexDirection: 'column',
         flex: 1,
         minHeight: 0,
-        width: '100%',
+
         overflow: 'hidden',
       }}
     >
       <div
         ref={listContainerRef}
         style={{
-          flex: 1,
           minHeight: 0,
           minWidth: 0,
           overflowY: 'auto',
           overflowX: 'hidden',
+          paddingBottom: 10,
         }}
       >
-        <Grid align="stretch" style={{ width: '100%', maxWidth: '100%' }}>
+        <Grid
+          align="stretch"
+          style={{ width: '100%', maxWidth: '100%' }}
+        >
           {shouldShowSkeletons
             ? Array.from({ length: skeletonCount }).map((_, index) => (
                 <Grid.Col
@@ -119,7 +122,7 @@ export const Posts: FC<PostsProps> = ({
                 <Grid.Col
                   span={colSpan}
                   key={index}
-                  style={{ display: 'flex' }}
+                  style={{ display: 'flex', maxWidth: 205 }}
                 >
                   <PostItem item={item} viewMode={viewMode} />
                 </Grid.Col>

@@ -1,0 +1,60 @@
+version: '3.9'
+
+services:
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: avito-server
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - NODE_ENV=development
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    command: npm run start
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/items"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: avito-client
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_BACKEND_URL=http://localhost:8080
+      - VITE_OLAMA_URL=http://localhost:11434
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    command: npm run dev -- --host 0.0.0.0
+    depends_on:
+      - server
+      - ollama
+    restart: unless-stopped
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama:/root/.ollama
+    restart: unless-stopped
+    command: >
+      sh -c "
+        ollama serve &
+        sleep 3 &&
+        ollama pull llama3 &&
+        wait
+      "
+volumes:
+  ollama:
