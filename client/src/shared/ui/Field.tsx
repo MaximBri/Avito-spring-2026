@@ -22,8 +22,6 @@ export const Field: FC<ParamFieldProps> = ({ param, category }) => {
         label={label}
         options={config.getOptions(category)}
         warningColor="#FFA940"
-        warningCondition
-        required
       />
     )
   }
@@ -35,7 +33,6 @@ export const Field: FC<ParamFieldProps> = ({ param, category }) => {
         label={label}
         warningColor="#FFA940"
         warningCondition
-        required
       />
     )
   }
@@ -45,8 +42,6 @@ export const Field: FC<ParamFieldProps> = ({ param, category }) => {
       name={`params.${param}`}
       label={label}
       warningColor="#FFA940"
-      required
-      warningCondition
     />
   )
 }

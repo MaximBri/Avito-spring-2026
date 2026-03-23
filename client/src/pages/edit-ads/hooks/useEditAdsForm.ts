@@ -1,19 +1,16 @@
-import { useForm, useFormContext } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import type { PostItemModel } from '../../../shared/api/posts/types'
 import { editSchema, type EditFormValues } from '../schema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { APP_ROUTES } from '../../../shared/constants/routes'
-import { postsApi } from '../../../shared/api/posts'
 import {
   Category,
   REQUIRED_PARAMS_BY_CATEGORY,
 } from '../../../shared/constants/category'
 import { useUpdatePost } from '../../../shared/api/posts/hooks/useUpdatePost'
+import { notifications } from '@mantine/notifications'
 
 export const useEditAdsForm = (id: number, postData?: PostItemModel) => {
-  const navigate = useNavigate()
   const { mutate: updatePost } = useUpdatePost(id)
   const form = useForm<EditFormValues>({
     resolver: zodResolver(editSchema),
@@ -32,17 +29,31 @@ export const useEditAdsForm = (id: number, postData?: PostItemModel) => {
       }
     })
 
-    updatePost({
-      category: values.category,
-      title: values.title,
-      description: values.description || '',
-      price: values.price,
-      params,
-    })
-
-    navigate(APP_ROUTES.ONE_ADS.replace(':id', id.toString()), {
-      replace: true,
-    })
+    updatePost(
+      {
+        category: values.category,
+        title: values.title,
+        description: values.description || '',
+        price: values.price,
+        params,
+      },
+      {
+        onSuccess: () => {
+          notifications.show({
+            title: 'Объявление обновлено',
+            message: '',
+            color: 'green',
+          })
+        },
+        onError: () => {
+          notifications.show({
+            title: 'Ошибка при обновлении',
+            message: '',
+            color: 'red',
+          })
+        },
+      },
+    )
   }
 
   function initializeForm(data?: PostItemModel) {

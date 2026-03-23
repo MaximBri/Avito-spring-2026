@@ -16,6 +16,7 @@ import { TextField } from '../../shared/ui/TextField'
 import { NumberField } from '../../shared/ui/NumberField'
 import { TextareaField } from '../../shared/ui/TextareaField'
 import { FieldWrapper } from '../../features/FieldWrapper'
+import { PriceButton } from '../../features/PriceButton'
 
 export const EditAdsPage = () => {
   const { id } = useParams<{ id: string }>()
@@ -27,7 +28,7 @@ export const EditAdsPage = () => {
     watch,
     handleSubmit,
     reset,
-    formState: { isSubmitting },
+    formState: { isSubmitting, isValid },
   } = form
   const category = watch('category')
   const additionalParams = watch('category')
@@ -77,7 +78,7 @@ export const EditAdsPage = () => {
                   name="title"
                 />
               </FieldWrapper>
-              <FieldWrapper>
+              <FieldWrapper styles={{ display: 'flex', gap: 24 }}>
                 <NumberField
                   label={
                     <span>
@@ -88,6 +89,7 @@ export const EditAdsPage = () => {
                   name="price"
                   min={1}
                 />
+                <PriceButton postData={postData}/>
               </FieldWrapper>
               <FieldWrapper>
                 <Box>
@@ -107,17 +109,14 @@ export const EditAdsPage = () => {
                   )}
                 </Box>
               </FieldWrapper>
-              <FieldWrapper>
-                <TextareaField
-                  label="Описание"
-                  placeholder="Описание объявления"
-                  minRows={4}
-                  name="description"
-                  warningCondition
-                />
-              </FieldWrapper>
+              <TextareaField
+                label="Описание"
+                placeholder="Описание объявления"
+                minRows={4}
+                name="description"
+              />
               <Group justify="flex-start" mt="lg" gap="md">
-                <Button type="submit" disabled={isSubmitting}>
+                <Button type="submit" disabled={isSubmitting || !isValid}>
                   Сохранить
                 </Button>
                 <Button
