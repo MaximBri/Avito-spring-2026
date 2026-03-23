@@ -1,7 +1,10 @@
 import { Grid } from '@mantine/core'
 import { PostItem } from './PostItem'
-import { POSTS_PAGE_SIZE, useGetPosts } from '../shared/api/posts/hooks/useGetPosts'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import {
+  POSTS_PAGE_SIZE,
+  useGetPosts,
+} from '../shared/api/posts/hooks/useGetPosts'
+import { useEffect, useMemo, useRef, useState, type FC } from 'react'
 import { PostsPagination } from './PostsPagination'
 import { PostItemSkeleton } from './PostItemSkeleton'
 import type { Category } from '../shared/constants/category'
@@ -18,14 +21,18 @@ interface PostsProps {
   viewMode: ViewModeType
 }
 
-export const Posts = ({
+export const Posts: FC<PostsProps> = ({
   searchQuery,
   categories,
   needsRevision,
   sortOption,
   viewMode,
-}: PostsProps) => {
-  const { data: posts, fetchNextPage, isLoading } = useGetPosts({
+}) => {
+  const {
+    data: posts,
+    fetchNextPage,
+    isLoading,
+  } = useGetPosts({
     q: searchQuery,
     categories,
     needsRevision,
@@ -65,7 +72,11 @@ export const Posts = ({
     listContainerRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
 
     if (nextPage > loadedPages) {
-      for (let pageToLoad = loadedPages; pageToLoad < nextPage; pageToLoad += 1) {
+      for (
+        let pageToLoad = loadedPages;
+        pageToLoad < nextPage;
+        pageToLoad += 1
+      ) {
         const result = await fetchNextPage()
         if (!result.data) break
       }
@@ -73,7 +84,16 @@ export const Posts = ({
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, width: '100%', overflow: 'hidden' }}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        flex: 1,
+        minHeight: 0,
+        width: '100%',
+        overflow: 'hidden',
+      }}
+    >
       <div
         ref={listContainerRef}
         style={{
@@ -87,19 +107,31 @@ export const Posts = ({
         <Grid align="stretch" style={{ width: '100%', maxWidth: '100%' }}>
           {shouldShowSkeletons
             ? Array.from({ length: skeletonCount }).map((_, index) => (
-                <Grid.Col span={colSpan} key={`skeleton-${index}`} style={{ display: 'flex' }}>
+                <Grid.Col
+                  span={colSpan}
+                  key={`skeleton-${index}`}
+                  style={{ display: 'flex' }}
+                >
                   <PostItemSkeleton />
                 </Grid.Col>
               ))
             : items.map((item, index) => (
-                <Grid.Col span={colSpan} key={index} style={{ display: 'flex' }}>
+                <Grid.Col
+                  span={colSpan}
+                  key={index}
+                  style={{ display: 'flex' }}
+                >
                   <PostItem item={item} viewMode={viewMode} />
                 </Grid.Col>
               ))}
         </Grid>
       </div>
       <div style={{ flexShrink: 0, paddingTop: 8, overflowX: 'hidden' }}>
-        <PostsPagination total={totalPages} value={page} onChange={handlePageChange} />
+        <PostsPagination
+          total={totalPages}
+          value={page}
+          onChange={handlePageChange}
+        />
       </div>
     </div>
   )
