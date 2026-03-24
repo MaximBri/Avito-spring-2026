@@ -101,8 +101,7 @@ export const Filters: FC<FiltersProps> = ({
             onChange={(event) =>
               onNeedsRevisionChange(event.currentTarget.checked)
             }
-            variant="default"
-            size="lg"
+            size="md"
             color="gray"
           />
         </Group>

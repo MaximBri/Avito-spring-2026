@@ -1,4 +1,4 @@
-import type { PostItemModel } from '../../shared/api/posts/types'
+import type { PostItemModel, PostModel } from '../../shared/api/posts/types'
 import {
   PARAM_LABELS,
   PARAM_VALUE_LABELS,
