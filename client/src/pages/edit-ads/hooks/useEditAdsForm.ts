@@ -2,7 +2,6 @@ import { useForm } from 'react-hook-form'
 import type { PostItemModel } from '../../../shared/api/posts/types'
 import { editSchema, type EditFormValues } from '../schema'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffect } from 'react'
 import {
   Category,
   REQUIRED_PARAMS_BY_CATEGORY,
@@ -11,15 +10,19 @@ import { useUpdatePost } from '../../../shared/api/posts/hooks/useUpdatePost'
 import { notifications } from '@mantine/notifications'
 import { useNavigate } from 'react-router-dom'
 import { APP_ROUTES } from '../../../shared/constants/routes'
+import { useLocalStorageDraft } from './useLocalStorageDraft'
 
 export const useEditAdsForm = (id: number, postData?: PostItemModel) => {
   const navigate = useNavigate()
   const { mutate: updatePost } = useUpdatePost(id)
+  const DRAFT_KEY = `edit-post-${id}`
   const form = useForm<EditFormValues>({
     resolver: zodResolver(editSchema),
     defaultValues: initializeForm(postData),
   })
-  const { watch, reset } = form
+  const { draft, clearDraft } = useLocalStorageDraft(form, postData, DRAFT_KEY)
+
+  const { watch } = form
   const category = watch('category')
   const additionalParams = category ? REQUIRED_PARAMS_BY_CATEGORY[category] : []
 
@@ -47,6 +50,7 @@ export const useEditAdsForm = (id: number, postData?: PostItemModel) => {
             message: '',
             color: 'green',
           })
+          clearDraft()
           navigate(`${APP_ROUTES.ADS}/${id}`)
         },
         onError: () => {
@@ -71,14 +75,5 @@ export const useEditAdsForm = (id: number, postData?: PostItemModel) => {
     }
   }
 
-  useEffect(() => {
-    if (postData) {
-      reset(initializeForm(postData), {
-        keepValues: false,
-        keepDirty: false,
-      })
-    }
-  }, [postData])
-
-  return { form, onSubmit }
+  return { form, onSubmit, draft }
 }
