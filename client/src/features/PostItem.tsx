@@ -13,11 +13,7 @@ interface PostItemProps {
 }
 
 export const PostItem: FC<PostItemProps> = ({ item, viewMode }) => {
-  const hasCategory = Boolean(item.category)
-  const hasTitle = Boolean(item.title?.trim())
-  const hasPrice = typeof item.price === 'number'
   const isListMode = viewMode === ViewMode.LIST
-  const shouldShowRevisionBadge = !(hasCategory && hasTitle && hasPrice)
   const imageHeight = isListMode ? 180 : 120
 
   return (
@@ -77,7 +73,7 @@ export const PostItem: FC<PostItemProps> = ({ item, viewMode }) => {
 
           <Text c="dimmed">{item.price} ₽</Text>
 
-          {shouldShowRevisionBadge && (
+          {item.needsRevision && (
             <Badge
               mt="xs"
               radius="xl"
@@ -92,7 +88,7 @@ export const PostItem: FC<PostItemProps> = ({ item, viewMode }) => {
                 label: {
                   textTransform: 'none',
                   color: '#F08C00',
-                  fontSize: 14,
+                  fontSize: 13,
                   fontWeight: 500,
                 },
               }}

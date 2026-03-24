@@ -122,7 +122,7 @@ export const Posts: FC<PostsProps> = ({
                 <Grid.Col
                   span={colSpan}
                   key={index}
-                  style={{ display: 'flex', maxWidth: 205 }}
+                  style={{ display: 'flex', maxWidth: 217 }}
                 >
                   <PostItem item={item} viewMode={viewMode} />
                 </Grid.Col>

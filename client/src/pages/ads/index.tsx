@@ -80,7 +80,7 @@ export default function AdsPage() {
           <aside
             style={{
               flex: '0 0 22%',
-              maxWidth: 320,
+              maxWidth: 250,
               minWidth: 0,
               overflowY: 'auto',
               overflowX: 'hidden',

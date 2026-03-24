@@ -2,7 +2,7 @@ import { useInfiniteQuery } from '@tanstack/react-query'
 import { postsApi } from '..'
 import type { UseGetPostsParams } from '../types'
 
-export const POSTS_PAGE_SIZE = 9
+export const POSTS_PAGE_SIZE = 10
 
 export const useGetPosts = ({
   q = '',

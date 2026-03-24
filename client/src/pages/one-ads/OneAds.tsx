@@ -31,6 +31,7 @@ export const OneAds = () => {
 
   const params = data?.params ?? {}
   const characteristics = Object.entries(params)
+  const missingFields = getMissingFields(data!)
 
   return (
     <AppShell bg="#FFF" style={{ minHeight: '100vh' }}>
@@ -102,7 +103,7 @@ export const OneAds = () => {
             </Grid.Col>
 
             <Grid.Col span={6}>
-              {data?.needsRevision && (
+              {!!missingFields.length && (
                 <Alert
                   color="yellow"
                   variant="light"
@@ -124,7 +125,7 @@ export const OneAds = () => {
                       listStylePosition: 'inside',
                     }}
                   >
-                    {getMissingFields(data).map((field) => (
+                    {missingFields.map((field) => (
                       <li key={field} style={{ color: '#6c757d' }}>
                         {field}
                       </li>

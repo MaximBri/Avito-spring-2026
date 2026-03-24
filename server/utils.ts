@@ -1,17 +1,24 @@
-import type { Item } from './types.ts';
-import {
-  AutoItemParamsSchema,
-  ElectronicsEstateItemParamsSchema,
-  RealEstateItemParamsSchema,
-} from './validation.ts';
+import { ITEM_CATEGORIES, requiredFieldsByCategory } from 'constants.ts'
+import type { Item } from './types.ts'
 
-export const doesItemNeedRevision = (item: Item): boolean =>
-  !Boolean(item.description) ||
-  !(() => {
-    if (item.category === 'auto')
-      return AutoItemParamsSchema.safeParse(item.params).success;
-    if (item.category === 'real_estate')
-      return RealEstateItemParamsSchema.safeParse(item.params).success;
+export const doesItemNeedRevision = (item: Item): boolean => {
+  if (!item.description) return true
 
-    return ElectronicsEstateItemParamsSchema.safeParse(item.params).success;
-  })();
+  const params = item.params ?? {}
+
+  if (item.category === ITEM_CATEGORIES.AUTO) {
+    return requiredFieldsByCategory[ITEM_CATEGORIES.AUTO].some(
+      (key) => !params[key as keyof typeof params],
+    )
+  }
+
+  if (item.category === ITEM_CATEGORIES.REAL_ESTATE) {
+    return requiredFieldsByCategory[ITEM_CATEGORIES.REAL_ESTATE].some(
+      (key) => !params[key as keyof typeof params],
+    )
+  }
+
+  return requiredFieldsByCategory[ITEM_CATEGORIES.ELECTRONICS].some(
+    (key) => !params[key as keyof typeof params],
+  )
+}
